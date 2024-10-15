@@ -1,3 +1,4 @@
+import "./style.css";
 
 const TodoCnstrct = ((title, descr, dueDate, priority, checklist) => {
     return {
