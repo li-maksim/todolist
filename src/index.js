@@ -10,22 +10,63 @@ const TodoCnstrct = ((title, descr, dueDate, priority, checklist) => {
     };
 });
 
-const ProjectCnstrct = (() => {
-    return [];
+const Projects = [];
+
+const ProjectCnstrct = ((name) => {
+    return {name: name, todos: []};
 });
 
-let todo1 = TodoCnstrct('Test', 'testtest', '15.09', 5);
-let project1 = ProjectCnstrct();
-project1.push(todo1);
-
 const ProjectMgmt = (() => {
+
+    function addProj(name) {
+        let newProj = ProjectCnstrct();
+        newProj.name = name;
+        Projects.push(newProj);
+    };
+    function delProj(idx) {
+        Projects.splice(idx, 1)
+    };
     function addTodo(arr, item) {
         arr.push(item);
     };
-    function delTodo(arr, n) {
-        arr.splice(n, 1);
+    function delTodo(arr, idx) {
+        arr.splice(idx, 1);
     };
 
-    return {addTodo, delTodo};
+    return {addProj, delProj, addTodo, delTodo};
+
 })();
+
+const Display = (() => {
+    const content = document.querySelector('#content');
+    const projMenu = document.querySelector('#proj_menu');
+
+
+    function createMenuItem(v, i, a) {
+        const newMenuItem = document.createElement('div');
+        newMenuItem.setAttribute('class', 'menu_item');
+        newMenuItem.textContent = a[i].name;
+        projMenu.appendChild(newMenuItem);
+    };
+    function clearMenu() {
+        projMenu.textContent = '';
+    };
+    function displayProjects() {
+        clearMenu();
+        Projects.forEach(createMenuItem);
+    };
+
+    return {clearMenu, displayProjects};
+
+})();
+
+ProjectMgmt.addProj('One');
+ProjectMgmt.addProj('Two');
+ProjectMgmt.addProj('Three');
+ProjectMgmt.addProj('Four');
+console.table(Projects);
+Display.displayProjects();
+
+ProjectMgmt.delProj(2);
+Display.displayProjects();
 
