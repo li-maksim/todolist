@@ -1,41 +1,45 @@
 import "./style.css";
 
-const TodoCnstrct = ((title, descr, dueDate, priority, checklist) => {
-    return {
-        title: title,
-        descr: descr,
-        dueDate: dueDate,
-        priority: priority,
-        checklist: checklist
-    };
-});
 
-const Projects = [];
+const Projects = {
+    arr: [],
+    delProj: function(idx) {
+        Projects.arr.splice(idx, 1);
+    }
+};
 
-const ProjectCnstrct = ((name) => {
-    return {name: name, todos: []};
-});
+const Project = function(name) {
 
-const ProjectMgmt = (() => {
+    const TodoCnstrct = ((title, descr, dueDate, priority, done, checklist) => {
+        return {
+            title: title,
+            descr: descr,
+            dueDate: dueDate,
+            priority: priority,
+            done: false,
+            checklist: checklist
+        };
+    });
 
-    function addProj(name) {
-        let newProj = ProjectCnstrct();
-        newProj.name = name;
-        Projects.push(newProj);
-    };
-    function delProj(idx) {
-        Projects.splice(idx, 1)
-    };
-    function addTodo(arr, item) {
-        arr.push(item);
-    };
-    function delTodo(arr, idx) {
-        arr.splice(idx, 1);
+    function addTodo(title, descr, dueDate, priority, done, checklist) {
+        let newTodo = TodoCnstrct(title, descr, dueDate, priority, done, checklist);
+        newProj.push(newTodo);
     };
 
-    return {addProj, delProj, addTodo, delTodo};
+    function delTodo(idx) {
+        newProj.splice(idx, 1);
+    };
 
-})();
+    const newProj = {
+        name: name, 
+        todos: [],
+        addTodo,
+        delTodo,
+    };
+
+    Projects.arr.push(newProj);
+    return newProj;
+};
 
 const Display = (() => {
     const content = document.querySelector('#content');
@@ -55,7 +59,7 @@ const Display = (() => {
         projDelBtn.classList.add('icon-delete');
         projDelBtn.setAttribute('data-project', idxNum);
         function delProj() {
-            ProjectMgmt.delProj(projDelBtn.dataset.project);
+            Projects.delProj(projDelBtn.dataset.project);
             console.log(projDelBtn.dataset.project);
         };
         projDelBtn.addEventListener('click', delProj);
@@ -72,16 +76,16 @@ const Display = (() => {
     function displayProjects() {
         clearMenu();
         idxNum = -1;
-        Projects.forEach(createMenuItem);
+        Projects.arr.forEach(createMenuItem);
     };
 
     return {clearMenu, displayProjects};
 
 })();
 
-ProjectMgmt.addProj('One');
-ProjectMgmt.addProj('Two');
-ProjectMgmt.addProj('Three');
-ProjectMgmt.addProj('Four');
+Project('One');
+Project('Two');
+Project('Three');
+Project('Four');
 console.table(Projects);
 Display.displayProjects();
