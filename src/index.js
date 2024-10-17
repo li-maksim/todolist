@@ -57,10 +57,19 @@ const Display = (() => {
 
     const Windows = (() => {
         const projNewBtn = document.querySelectorAll('.new_proj');
+        const closeBtn = document.querySelectorAll('.close_btn');
+        const windows = document.querySelectorAll('.window');
+        function closeWindow() {
+            windows.forEach(function (a) {a.close()})
+        }
+        closeBtn.forEach(function (a) {a.addEventListener('click', closeWindow)});
 
         const projAddWindow = document.querySelector('.proj_addwindow');
         const projAddInput = document.querySelector('#proj_add');
         const projAddBtn = document.querySelectorAll('.proj_addbtn');
+        function showAddWindow() {
+            projAddWindow.showModal();
+        };
         function addProj(evt) {
             evt.preventDefault();
             if (projAddInput.value == '') {
@@ -71,12 +80,16 @@ const Display = (() => {
             projAddInput.value = '';
             projAddWindow.close();
         };
-        function showAddWindow() {
-            projAddWindow.showModal();
-        }
-
         projAddBtn.forEach(function(a) {a.addEventListener('click', addProj)});
         projNewBtn.forEach(function(a) {a.addEventListener('click', showAddWindow)});
+
+        const projEditWindow = document.querySelector('.proj_editwindow');
+        function showEditWindow() {
+            projEditWindow.showModal();
+        };
+
+        return {showEditWindow};
+
     })();
 
     function createMenuItem(v, i, a) {
@@ -93,6 +106,10 @@ const Display = (() => {
         const projEditBtn = document.createElement('button');
         projEditBtn.classList.add('btn');
         projEditBtn.classList.add('icon-edit');
+        projEditBtn.setAttribute('data-project', idxNum);
+        projEditBtn.addEventListener('click', Windows.showEditWindow);
+        // const projEditInput = document.querySelector('#proj_edit');
+        // projEditInput.value = Projects.arr[projEditBtn.dataset.project].name;
 
         const projDelBtn = document.createElement('button');
         projDelBtn.classList.add('btn');
@@ -123,3 +140,4 @@ Project('Three');
 Project('Four');
 console.table(Projects);
 Display.displayProjects();
+console.log(Projects.arr[1].name);
