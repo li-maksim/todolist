@@ -63,8 +63,12 @@ const Display = (() => {
         const projAddBtn = document.querySelectorAll('.proj_addbtn');
         function addProj(evt) {
             evt.preventDefault();
+            if (projAddInput.value == '') {
+                projAddInput.value = projAddInput.placeholder;
+            };
             Project(projAddInput.value);
             displayProjects();
+            projAddInput.value = '';
             projAddWindow.close();
         };
         function showAddWindow() {
