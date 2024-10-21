@@ -5,6 +5,9 @@ const Projects = {
     arr: [],
     delProj: function(idx) {
         Projects.arr.splice(idx, 1);
+    },
+    editProj: function(idx, name) {
+        Projects.arr[idx].name = name;
     }
 };
 
@@ -55,6 +58,13 @@ const Display = (() => {
         Projects.arr.forEach(createMenuItem);
     };
 
+    const dataset = {};
+    function getDataset() {
+        dataset.project = this.dataset.project;
+        Windows.projEditInput.value = Projects.arr[dataset.project].name;
+        console.log(dataset.project)
+    };
+
     const Windows = (() => {
         const projNewBtn = document.querySelectorAll('.new_proj');
         const closeBtn = document.querySelectorAll('.close_btn');
@@ -88,12 +98,25 @@ const Display = (() => {
             projEditWindow.showModal();
         };
 
-        return {showEditWindow};
+        const projEditInput = document.querySelector('#proj_edit');
+        function projEdit() {
+            Projects.editProj(dataset.project, projEditInput.value);
+            displayProjects();
+            Windows.closeWindow();
+            console.table(Projects.arr);
+        };
+
+        const projEditWindowBtn = document.querySelector('#proj_editbtn');
+        projEditWindowBtn.addEventListener('click', projEdit);
+
+        return {showEditWindow, closeWindow, projEditInput};
 
     })();
 
     function createMenuItem(v, i, a) {
+
         idxNum++;
+
         const newMenuItem = document.createElement('div');
         newMenuItem.setAttribute('class', 'menu_item');
         const projName = document.createElement('div');
@@ -107,9 +130,8 @@ const Display = (() => {
         projEditBtn.classList.add('btn');
         projEditBtn.classList.add('icon-edit');
         projEditBtn.setAttribute('data-project', idxNum);
+        projEditBtn.addEventListener('click', getDataset);
         projEditBtn.addEventListener('click', Windows.showEditWindow);
-        // const projEditInput = document.querySelector('#proj_edit');
-        // projEditInput.value = Projects.arr[projEditBtn.dataset.project].name;
 
         const projDelBtn = document.createElement('button');
         projDelBtn.classList.add('btn');
