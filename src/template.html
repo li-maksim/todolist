@@ -16,52 +16,54 @@
             <button class="btn new_note">New Note</button>
         </div>
     </header>
-    <div class="sidebar">
-        <div class="h2_wrapper">
-            <h2 class="sidebar_h2">Projects</h2>
-            <button class="btn new_proj">+</button>
+    <div class="container">
+        <div class="sidebar">
+            <div class="h2_wrapper">
+                <h2 class="sidebar_h2">Projects</h2>
+                <button class="btn new_proj">+</button>
+            </div>
+            <hr>
+            <div id="proj_menu"></div>
         </div>
-        <hr>
-        <div id="proj_menu"></div>
-    </div>
-
-    <dialog class="proj_addwindow window">
-        <button class="close_btn">X</button>
-        <label for="proj_add">Project Name:</label>
-        <input type="text" id="proj_add" placeholder="New Project">
-        <button class="proj_addbtn">Add</button>
-    </dialog>
-
-    <dialog class="proj_editwindow window">
-        <button class="close_btn">X</button>
-        <label for="proj_add">Project Name:</label>
-        <input type="text" id="proj_edit">
-        <button id="proj_editbtn">Edit</button>
-    </dialog>
-
-    <dialog class="note_newwindow window">
-        <button class="close_btn">X</button>
-        <label for="note_newname">Title:</label>
-        <input type="text" id="note_newname" placeholder="New Todo">
-        <input type="date" id="note_newdate">
-        <label for="note_newpriority">Priority:</label>
-        <select name="Priority" id="note_newpriority">
-            <option value="5" selected>5</option>
-            <option value="4">4</option>
-            <option value="3">3</option>
-            <option value="2">2</option>
-            <option value="1">1</option>
-        </select>
-        <label for="note_newdescr">Notes:</label>
-        <input type="textarea" id="note_newdescr" placeholder="Notes">
-        <select name="Project" id="note_newproj">
-
-        </select>
-        <button id="note_add">Add</button>
-    </dialog>
-
-    <div id="content">
-        
+    
+        <dialog class="proj_addwindow window">
+            <button class="close_btn">X</button>
+            <label for="proj_add">Project Name:</label>
+            <input type="text" id="proj_add" placeholder="New Project">
+            <button class="proj_addbtn">Add</button>
+        </dialog>
+    
+        <dialog class="proj_editwindow window">
+            <button class="close_btn">X</button>
+            <label for="proj_add">Project Name:</label>
+            <input type="text" id="proj_edit">
+            <button id="proj_editbtn">Edit</button>
+        </dialog>
+    
+        <dialog class="note_newwindow window">
+            <button class="close_btn">X</button>
+            <label for="note_newname">Title:</label>
+            <input type="text" id="note_newname" placeholder="New Todo">
+            <input type="date" id="note_newdate">
+            <label for="note_newpriority">Priority:</label>
+            <select name="Priority" id="note_newpriority">
+                <option value="5" selected>5</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+            </select>
+            <label for="note_newdescr">Notes:</label>
+            <input type="textarea" id="note_newdescr" placeholder="Notes">
+            <select name="Project" id="note_newproj">
+    
+            </select>
+            <button id="note_add">Add</button>
+        </dialog>
+    
+        <div id="content">
+            
+        </div>
     </div>
 </body>
 </html>

@@ -13,16 +13,6 @@ const Projects = {
 
 const Project = function(name) {
 
-    // const TodoCnstrct = ((title, descr, dueDate, priority, done) => {
-    //     return {
-    //         title: title,
-    //         descr: descr,
-    //         dueDate: dueDate,
-    //         priority: priority,
-    //         done: false,
-    //     };
-    // });
-
     function addTodo(title, descr, dueDate, priority, done) {
         let newTodo = {
             title: title,
@@ -61,6 +51,9 @@ const Display = (() => {
         clearMenu();
         idxNum = -1;
         Projects.arr.forEach(createMenuItem);
+    };
+    function clearContent() {
+        content.textContent = '';
     };
 
     const dataset = {};
@@ -163,6 +156,8 @@ const Display = (() => {
         const projName = document.createElement('div');
         projName.setAttribute('class', 'project_name');
         projName.textContent = a[i].name;
+        projName.addEventListener('click', () => {clearContent()});
+        projName.addEventListener('click', () => {Projects.arr[i].todos.forEach(createNoteCard)});
 
         const itemIcons = document.createElement('div');
         itemIcons.setAttribute('class', 'item_icons');
@@ -193,13 +188,48 @@ const Display = (() => {
         projMenu.appendChild(newMenuItem);
     };
 
-    const Notes = {
+    function createNoteCard(v, i, a) {
 
+        const noteCard = document.createElement('div');
+        noteCard.setAttribute('class', 'note_card')
 
+        const noteBtns = document.createElement('div');
+        noteBtns.setAttribute('class', 'note_btns');
+        const noteDoneBtn = document.createElement('input');
+        noteDoneBtn.type = 'checkbox';
+        noteDoneBtn.setAttribute('class', 'checkbox');
+        const noteEditBtn = document.createElement('button');
+        noteEditBtn.classList.add('btn', 'icon-edit');
+        const noteDelBtn = document.createElement('button');
+        noteDelBtn.classList.add('btn', 'icon-delete');
+
+        const cardContent = document.createElement('div');
+        cardContent.setAttribute('class', 'card_content');
+        const noteTitle = document.createElement('h2');
+        noteTitle.textContent = a[i].title;
+        const noteDate = document.createElement('div');
+        noteDate.setAttribute('class', 'note_date');
+        const notePriority = document.createElement('div');
+        notePriority.setAttribute('class', 'note_priority');
+        notePriority.textContent = a[i].priority;
+        const noteDescr = document.createElement('div');
+        noteDescr.setAttribute('class', 'note_descr');
+        noteDescr.textContent = a[i].descr;
+
+        noteBtns.appendChild(noteDoneBtn);
+        noteBtns.appendChild(noteEditBtn);
+        noteBtns.appendChild(noteDelBtn);
+        cardContent.appendChild(noteTitle);
+        cardContent.appendChild(noteDate);
+        cardContent.appendChild(notePriority);
+        cardContent.appendChild(noteDescr);
+        noteCard.appendChild(noteBtns);
+        noteCard.appendChild(cardContent);
+        content.appendChild(noteCard);
 
     };
 
-    return {clearMenu, displayProjects};
+    return {clearMenu, displayProjects, createNoteCard};
 
 })();
 
@@ -207,6 +237,8 @@ Project('One');
 Project('Two');
 Project('Three');
 Project('Four');
-console.table(Projects);
 Display.displayProjects();
-console.log(Projects.arr[1].name);
+
+Projects.arr[0].addTodo('Test', 'test text');
+Projects.arr[0].addTodo('Double test', 'another text');
+Projects.arr[0].todos.forEach(Display.createNoteCard);

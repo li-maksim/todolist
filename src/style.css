@@ -47,6 +47,11 @@ h1 {
     color: #FFAB4B;
 }
 
+.container {
+    display: flex;
+    justify-content: end;
+}
+
 .sidebar {
     position: absolute;
     display: flex;
@@ -95,4 +100,32 @@ h1 {
 
 .sidebar .menu_item:first-child {
     margin-top: 15px;
+}
+
+.sidebar .menu_item .project_name {
+    cursor: pointer;
+}
+
+.sidebar .menu_item .project_name:hover {
+    color: #FFAB4B;
+}
+
+#content {
+    box-sizing: border-box;
+    padding: 25px;
+    display: flex;
+    min-height: 100%;
+    width: 70%;
+    justify-content: start;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+#content .note_card {
+    box-sizing: border-box;
+    padding: 5px;
+    height: 200px;
+    width: 200px;
+    border: solid black;
+    border-radius: 20px;
 }
