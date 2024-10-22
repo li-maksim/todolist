@@ -13,7 +13,7 @@
         </div>
         <div class="header_btns">
             <button class="btn new_proj">New Project</button>
-            <button class="btn" id="new_note">New Note</button>
+            <button class="btn new_note">New Note</button>
         </div>
     </header>
     <div class="sidebar">
@@ -37,6 +37,27 @@
         <label for="proj_add">Project Name:</label>
         <input type="text" id="proj_edit">
         <button id="proj_editbtn">Edit</button>
+    </dialog>
+
+    <dialog class="note_newwindow window">
+        <button class="close_btn">X</button>
+        <label for="note_newname">Title:</label>
+        <input type="text" id="note_newname" placeholder="New Todo">
+        <input type="date" id="note_newdate">
+        <label for="note_newpriority">Priority:</label>
+        <select name="Priority" id="note_newpriority">
+            <option value="5" selected>5</option>
+            <option value="4">4</option>
+            <option value="3">3</option>
+            <option value="2">2</option>
+            <option value="1">1</option>
+        </select>
+        <label for="note_newdescr">Notes:</label>
+        <input type="textarea" id="note_newdescr" placeholder="Notes">
+        <select name="Project" id="note_newproj">
+
+        </select>
+        <button id="note_add">Add</button>
     </dialog>
 
     <div id="content">

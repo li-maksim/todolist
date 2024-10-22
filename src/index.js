@@ -13,24 +13,29 @@ const Projects = {
 
 const Project = function(name) {
 
-    const TodoCnstrct = ((title, descr, dueDate, priority, done, checklist) => {
-        return {
+    // const TodoCnstrct = ((title, descr, dueDate, priority, done) => {
+    //     return {
+    //         title: title,
+    //         descr: descr,
+    //         dueDate: dueDate,
+    //         priority: priority,
+    //         done: false,
+    //     };
+    // });
+
+    function addTodo(title, descr, dueDate, priority, done) {
+        let newTodo = {
             title: title,
             descr: descr,
             dueDate: dueDate,
             priority: priority,
             done: false,
-            checklist: checklist
         };
-    });
-
-    function addTodo(title, descr, dueDate, priority, done, checklist) {
-        let newTodo = TodoCnstrct(title, descr, dueDate, priority, done, checklist);
-        newProj.push(newTodo);
+        newProj.todos.push(newTodo);
     };
 
     function delTodo(idx) {
-        newProj.splice(idx, 1);
+        newProj.todos.splice(idx, 1);
     };
 
     const newProj = {
@@ -109,6 +114,42 @@ const Display = (() => {
         const projEditWindowBtn = document.querySelector('#proj_editbtn');
         projEditWindowBtn.addEventListener('click', projEdit);
 
+        const newNoteBtn = document.querySelectorAll('.new_note');
+        const newNoteWindow = document.querySelector('.note_newwindow');
+        const newNoteTitle = document.querySelector('#note_newname');
+        const newNoteDate = document.querySelector('#note_newdate');
+        const newNotePriority = document.querySelector('#note_newpriority');
+        const newNoteDescr = document.querySelector('#note_newdescr');
+        const newNoteProj = document.querySelector('#note_newproj');
+        function createProjOptions() {
+            Projects.arr.forEach(function(v, i, a) {
+                const option = document.createElement('option');
+                option.textContent = a[i].name;
+                option.value = i;
+                newNoteProj.appendChild(option);
+            });
+        };
+        newNoteBtn.forEach(function(a) {a.addEventListener('click', () => {newNoteWindow.showModal()})});
+        newNoteBtn.forEach(function(a) {a.addEventListener('click', () => {newNoteProj.textContent = ''})});
+        newNoteBtn.forEach(function(a) {a.addEventListener('click', createProjOptions)});
+        function addNewNote() {
+            const selected = newNoteProj.options[newNoteProj.selectedIndex].value;
+            Projects.arr[selected].addTodo(
+                newNoteTitle.value,
+                newNoteDescr.value,
+                newNoteDate.value,
+                newNotePriority.value
+            );
+            newNoteWindow.close();
+            newNoteTitle.value = '';
+            newNoteDescr.value = '';
+            newNoteDate.value = '';
+            newNotePriority.value = '';
+            console.table(Projects.arr);
+        };
+        const newNoteAddBtn = document.querySelector('#note_add');
+        newNoteAddBtn.addEventListener('click', addNewNote);
+
         return {showEditWindow, closeWindow, projEditInput};
 
     })();
@@ -150,6 +191,12 @@ const Display = (() => {
         newMenuItem.appendChild(projName);
         newMenuItem.appendChild(itemIcons);
         projMenu.appendChild(newMenuItem);
+    };
+
+    const Notes = {
+
+
+
     };
 
     return {clearMenu, displayProjects};
