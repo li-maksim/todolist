@@ -143,3 +143,10 @@ h1 {
     height: 1px;
     background-color: rgba(0, 0, 0, 0.9);
 }
+
+.note_card.done {
+    background-color: #c5b1b1;
+    h2, .note_descr {
+        text-decoration: line-through;
+    }
+}

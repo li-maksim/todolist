@@ -245,6 +245,19 @@ const Display = (() => {
         const noteDoneBtn = document.createElement('input');
         noteDoneBtn.type = 'checkbox';
         noteDoneBtn.setAttribute('class', 'checkbox');
+        function checkbox() {
+            if (noteDoneBtn.checked == true) {
+                noteCard.classList.add('done');
+                a[i].done = true;
+                console.log(a);
+            } else {
+                noteCard.classList.remove('done');
+                a[i].done = false;
+                console.log(a);
+            };
+        };
+        noteDoneBtn.addEventListener('click', checkbox);
+
         const noteDelBtn = document.createElement('button');
         noteDelBtn.classList.add('btn', 'icon-delete');
         function delNote() {
