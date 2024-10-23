@@ -1,4 +1,5 @@
 import "./style.css";
+import {format} from "date-fns";
 
 
 const Projects = {
@@ -56,11 +57,10 @@ const Display = (() => {
         content.textContent = '';
     };
 
-    const dataset = {};
+    const dataset = {project: 0};
     function getDataset() {
         dataset.project = this.dataset.project;
-        Windows.projEditInput.value = Projects.arr[dataset.project].name;
-        console.log(dataset.project)
+        console.log(dataset.project);
     };
 
     const Windows = (() => {
@@ -130,7 +130,7 @@ const Display = (() => {
             Projects.arr[selected].addTodo(
                 newNoteTitle.value,
                 newNoteDescr.value,
-                newNoteDate.value,
+                format(newNoteDate.value, "MM/dd/yyyy"),
                 newNotePriority.value
             );
             newNoteWindow.close();
@@ -155,8 +155,10 @@ const Display = (() => {
         newMenuItem.setAttribute('class', 'menu_item');
         const projName = document.createElement('div');
         projName.setAttribute('class', 'project_name');
+        projName.setAttribute('data-project', idxNum);
         projName.textContent = a[i].name;
         projName.addEventListener('click', () => {clearContent()});
+        projName.addEventListener('click', getDataset);
         projName.addEventListener('click', () => {Projects.arr[i].todos.forEach(createNoteCard)});
 
         const itemIcons = document.createElement('div');
@@ -167,6 +169,7 @@ const Display = (() => {
         projEditBtn.classList.add('icon-edit');
         projEditBtn.setAttribute('data-project', idxNum);
         projEditBtn.addEventListener('click', getDataset);
+        projEditBtn.addEventListener('click', () => {Windows.projEditInput.value = Projects.arr[dataset.project].name});
         projEditBtn.addEventListener('click', Windows.showEditWindow);
 
         const projDelBtn = document.createElement('button');
@@ -188,10 +191,14 @@ const Display = (() => {
         projMenu.appendChild(newMenuItem);
     };
 
+    let idx = 0;
+
     function createNoteCard(v, i, a) {
 
         const noteCard = document.createElement('div');
         noteCard.setAttribute('class', 'note_card')
+        noteCard.setAttribute('data-note', idx);
+        idx++;
 
         const noteBtns = document.createElement('div');
         noteBtns.setAttribute('class', 'note_btns');
@@ -203,12 +210,22 @@ const Display = (() => {
         const noteDelBtn = document.createElement('button');
         noteDelBtn.classList.add('btn', 'icon-delete');
 
+        function delNote() {
+            Projects.arr[dataset.project].delTodo(noteCard.dataset.note);
+            console.log(noteCard.dataset.note);
+            clearContent();
+            idx = 0;
+            a.forEach(createNoteCard);
+        }
+        noteDelBtn.addEventListener('click', delNote);
+
         const cardContent = document.createElement('div');
         cardContent.setAttribute('class', 'card_content');
         const noteTitle = document.createElement('h2');
         noteTitle.textContent = a[i].title;
         const noteDate = document.createElement('div');
         noteDate.setAttribute('class', 'note_date');
+        noteDate.textContent = a[i].dueDate;
         const notePriority = document.createElement('div');
         notePriority.setAttribute('class', 'note_priority');
         notePriority.textContent = a[i].priority;
@@ -239,6 +256,6 @@ Project('Three');
 Project('Four');
 Display.displayProjects();
 
-Projects.arr[0].addTodo('Test', 'test text');
-Projects.arr[0].addTodo('Double test', 'another text');
+Projects.arr[0].addTodo('Test', 'test text', format(new Date(2014, 1, 11), "MM/dd/yyyy"), 3);
+Projects.arr[0].addTodo('Double test', 'another text', format(new Date(2014, 2, 1), "MM/dd/yyyy"), 2);
 Projects.arr[0].todos.forEach(Display.createNoteCard);
