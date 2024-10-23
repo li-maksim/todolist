@@ -60,6 +60,24 @@
             </select>
             <button id="note_add">Add</button>
         </dialog>
+
+        <dialog class="note_editwindow window">
+            <button class="close_btn">X</button>
+            <label for="note_editname">Title:</label>
+            <input type="text" id="note_editname">
+            <input type="date" id="note_editdate">
+            <label for="note_editpriority">Priority:</label>
+            <select name="Priority" id="note_editpriority">
+                <option value="5">5</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+            </select>
+            <label for="note_editdescr">Notes:</label>
+            <input type="textarea" id="note_editdescr">
+            <button id="note_edit">Save</button>
+        </dialog>
     
         <div id="content">
             

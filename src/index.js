@@ -47,20 +47,25 @@ const Display = (() => {
 
     function clearMenu() {
         projMenu.textContent = '';
+        idxNum = -1;
     };
     function displayProjects() {
         clearMenu();
-        idxNum = -1;
         Projects.arr.forEach(createMenuItem);
     };
     function clearContent() {
         content.textContent = '';
+        idx = -1;
     };
 
-    const dataset = {project: 0};
+    const dataset = {project: 0, note: 0};
     function getDataset() {
         dataset.project = this.dataset.project;
-        console.log(dataset.project);
+        console.table(dataset.project);
+    };
+    function getDataNote() {
+        dataset.note = this.dataset.note;
+        console.table(dataset);
     };
 
     const Windows = (() => {
@@ -93,6 +98,7 @@ const Display = (() => {
 
         const projEditWindow = document.querySelector('.proj_editwindow');
         function showEditWindow() {
+            projEditInput.value = Projects.arr[dataset.project].name;
             projEditWindow.showModal();
         };
 
@@ -119,21 +125,27 @@ const Display = (() => {
                 const option = document.createElement('option');
                 option.textContent = a[i].name;
                 option.value = i;
+                if (i == dataset.project) {
+                    console.log(i);
+                    option.setAttribute('selected', true);
+                };
                 newNoteProj.appendChild(option);
             });
         };
         newNoteBtn.forEach(function(a) {a.addEventListener('click', () => {newNoteWindow.showModal()})});
         newNoteBtn.forEach(function(a) {a.addEventListener('click', () => {newNoteProj.textContent = ''})});
         newNoteBtn.forEach(function(a) {a.addEventListener('click', createProjOptions)});
+
         function addNewNote() {
             const selected = newNoteProj.options[newNoteProj.selectedIndex].value;
             Projects.arr[selected].addTodo(
                 newNoteTitle.value,
                 newNoteDescr.value,
-                format(newNoteDate.value, "MM/dd/yyyy"),
+                newNoteDate.value,
                 newNotePriority.value
             );
             newNoteWindow.close();
+            clearContent();
             Projects.arr[dataset.project].todos.forEach(createNoteCard);
             newNoteTitle.value = '';
             newNoteDescr.value = '';
@@ -144,7 +156,34 @@ const Display = (() => {
         const newNoteAddBtn = document.querySelector('#note_add');
         newNoteAddBtn.addEventListener('click', addNewNote);
 
-        return {showEditWindow, closeWindow, projEditInput};
+        const noteEditWindow = document.querySelector('.note_editwindow');
+        const editNoteTitle = document.querySelector('#note_editname');
+        const editNoteDate = document.querySelector('#note_editdate');
+        const editNotePriority = document.querySelector('#note_editpriority');
+        const editNoteDescr = document.querySelector('#note_editdescr');
+        const noteSaveBtn = document.querySelector('#note_edit');
+
+        function showNoteEditWindow() {
+            editNoteTitle.value = Projects.arr[dataset.project].todos[dataset.note].title;
+            editNoteDate.value = Projects.arr[dataset.project].todos[dataset.note].dueDate;
+            editNotePriority.value = Projects.arr[dataset.project].todos[dataset.note].priority;
+            editNoteDescr.value = Projects.arr[dataset.project].todos[dataset.note].descr;
+            noteEditWindow.showModal();
+        };
+
+        function saveNote() {
+            Projects.arr[dataset.project].todos[dataset.note].title = editNoteTitle.value;
+            Projects.arr[dataset.project].todos[dataset.note].dueDate = editNoteDate.value;
+            Projects.arr[dataset.project].todos[dataset.note].priority = editNotePriority.value;
+            Projects.arr[dataset.project].todos[dataset.note].descr = editNoteDescr.value;
+            noteEditWindow.close();
+            clearContent();
+            Projects.arr[dataset.project].todos.forEach(createNoteCard);
+        };
+
+        noteSaveBtn.addEventListener('click', saveNote);
+
+        return {showEditWindow, closeWindow, projEditInput, showNoteEditWindow};
 
     })();
 
@@ -170,7 +209,6 @@ const Display = (() => {
         projEditBtn.classList.add('icon-edit');
         projEditBtn.setAttribute('data-project', idxNum);
         projEditBtn.addEventListener('click', getDataset);
-        projEditBtn.addEventListener('click', () => {Windows.projEditInput.value = Projects.arr[dataset.project].name});
         projEditBtn.addEventListener('click', Windows.showEditWindow);
 
         const projDelBtn = document.createElement('button');
@@ -192,41 +230,42 @@ const Display = (() => {
         projMenu.appendChild(newMenuItem);
     };
 
-    let idx = 0;
+    let idx = -1;
 
     function createNoteCard(v, i, a) {
+
+        idx++;
 
         const noteCard = document.createElement('div');
         noteCard.setAttribute('class', 'note_card')
         noteCard.setAttribute('data-note', idx);
-        idx++;
 
         const noteBtns = document.createElement('div');
         noteBtns.setAttribute('class', 'note_btns');
         const noteDoneBtn = document.createElement('input');
         noteDoneBtn.type = 'checkbox';
         noteDoneBtn.setAttribute('class', 'checkbox');
-        const noteEditBtn = document.createElement('button');
-        noteEditBtn.classList.add('btn', 'icon-edit');
         const noteDelBtn = document.createElement('button');
         noteDelBtn.classList.add('btn', 'icon-delete');
-
         function delNote() {
             Projects.arr[dataset.project].delTodo(noteCard.dataset.note);
             console.log(noteCard.dataset.note);
             clearContent();
-            idx = 0;
             a.forEach(createNoteCard);
         }
         noteDelBtn.addEventListener('click', delNote);
+        const noteHr = document.createElement('hr');
 
         const cardContent = document.createElement('div');
         cardContent.setAttribute('class', 'card_content');
+        cardContent.setAttribute('data-note', idx);
+        cardContent.addEventListener('click', getDataNote);
+        cardContent.addEventListener('click', Windows.showNoteEditWindow);
         const noteTitle = document.createElement('h2');
         noteTitle.textContent = a[i].title;
         const noteDate = document.createElement('div');
         noteDate.setAttribute('class', 'note_date');
-        noteDate.textContent = a[i].dueDate;
+        noteDate.textContent = format(a[i].dueDate, "dd/MM/yyyy");
         const notePriority = document.createElement('div');
         notePriority.setAttribute('class', 'note_priority');
         notePriority.textContent = a[i].priority;
@@ -235,13 +274,13 @@ const Display = (() => {
         noteDescr.textContent = a[i].descr;
 
         noteBtns.appendChild(noteDoneBtn);
-        noteBtns.appendChild(noteEditBtn);
         noteBtns.appendChild(noteDelBtn);
         cardContent.appendChild(noteTitle);
         cardContent.appendChild(noteDate);
         cardContent.appendChild(notePriority);
         cardContent.appendChild(noteDescr);
         noteCard.appendChild(noteBtns);
+        noteCard.appendChild(noteHr);
         noteCard.appendChild(cardContent);
         content.appendChild(noteCard);
 
@@ -257,6 +296,6 @@ Project('Three');
 Project('Four');
 Display.displayProjects();
 
-Projects.arr[0].addTodo('Test', 'test text', format(new Date(2014, 1, 11), "MM/dd/yyyy"), 3);
-Projects.arr[0].addTodo('Double test', 'another text', format(new Date(2014, 2, 1), "MM/dd/yyyy"), 2);
+Projects.arr[0].addTodo('Test', 'test text', '2024-10-24', 3);
+Projects.arr[0].addTodo('Double test', 'another text', '2024-10-25', 2);
 Projects.arr[0].todos.forEach(Display.createNoteCard);

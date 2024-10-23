@@ -123,9 +123,23 @@ h1 {
 
 #content .note_card {
     box-sizing: border-box;
-    padding: 5px;
-    height: 200px;
-    width: 200px;
+    padding: 20px;
+    height: 250px;
+    width: 250px;
     border: solid black;
     border-radius: 20px;
+}
+
+#content .note_card:hover {
+    transform: scale(105%);
+}
+
+
+#content .note_card .card_content {
+    cursor: pointer;
+}
+
+#content .note_card hr {
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.9);
 }
