@@ -134,6 +134,7 @@ const Display = (() => {
                 newNotePriority.value
             );
             newNoteWindow.close();
+            Projects.arr[dataset.project].todos.forEach(createNoteCard);
             newNoteTitle.value = '';
             newNoteDescr.value = '';
             newNoteDate.value = '';
