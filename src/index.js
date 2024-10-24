@@ -137,21 +137,23 @@ const Display = (() => {
         newNoteBtn.forEach(function(a) {a.addEventListener('click', createProjOptions)});
 
         function addNewNote() {
-            const selected = newNoteProj.options[newNoteProj.selectedIndex].value;
-            Projects.arr[selected].addTodo(
-                newNoteTitle.value,
-                newNoteDescr.value,
-                newNoteDate.value,
-                newNotePriority.value
-            );
-            newNoteWindow.close();
-            clearContent();
-            Projects.arr[dataset.project].todos.forEach(createNoteCard);
-            newNoteTitle.value = '';
-            newNoteDescr.value = '';
-            newNoteDate.value = '';
-            newNotePriority.value = '';
-            console.table(Projects.arr);
+            if (newNoteDate.value !== '') {
+                const selected = newNoteProj.options[newNoteProj.selectedIndex].value;
+                Projects.arr[selected].addTodo(
+                    newNoteTitle.value,
+                    newNoteDescr.value,
+                    newNoteDate.value,
+                    newNotePriority.value
+                );
+                newNoteWindow.close();
+                clearContent();
+                Projects.arr[dataset.project].todos.forEach(createNoteCard);
+                newNoteTitle.value = '';
+                newNoteDescr.value = '';
+                newNoteDate.value = '';
+                newNotePriority.value = '';
+                console.table(Projects.arr);
+            } else {newNoteDate.style.outline = 'solid red'};
         };
         const newNoteAddBtn = document.querySelector('#note_add');
         newNoteAddBtn.addEventListener('click', addNewNote);
@@ -257,6 +259,10 @@ const Display = (() => {
             };
         };
         noteDoneBtn.addEventListener('click', checkbox);
+        if (a[i].done == true) {
+            noteCard.classList.add('done');
+            noteDoneBtn.checked = true;
+        };
 
         const noteDelBtn = document.createElement('button');
         noteDelBtn.classList.add('btn', 'icon-delete');
