@@ -40,6 +40,49 @@ const Project = function(name) {
     return newProj;
 };
 
+const SaveLoad = (() => {
+
+    let savedProjects;
+    function saveProjectsData() {
+        savedProjects = JSON.stringify(Projects.arr);
+        window.localStorage.clear();
+        window.localStorage.setItem("ProjectsData", savedProjects);
+        console.log(savedProjects);
+    };
+
+    let loadedProjects = JSON.parse(localStorage.getItem('ProjectsData'));
+    function loadProjects(v, i, a) {
+        const newProject = {};
+        newProject.name = a[i].name;
+        newProject.todos = a[i].todos;
+        newProject.addTodo = function(title, descr, dueDate, priority, done) {
+            let newTodo = {
+                title: title,
+                descr: descr,
+                dueDate: dueDate,
+                priority: priority,
+                done: false,
+            };
+            newProject.todos.push(newTodo);
+        };
+        newProject.delTodo = function(idx) {
+            newProject.todos.splice(idx, 1);
+        };
+        Projects.arr.push(newProject);
+    };
+
+    function loadProjectsData() {
+        Projects.arr.length = 0;
+        loadedProjects.forEach(loadProjects);
+        Display.displayProjects();
+        Display.clearContent();
+        Projects.arr[0].todos.forEach(Display.createNoteCard);
+    };
+
+    return {saveProjectsData, loadProjectsData};
+
+})();
+
 const Display = (() => {
     const content = document.querySelector('#content');
     const projMenu = document.querySelector('#proj_menu');
@@ -157,6 +200,7 @@ const Display = (() => {
         };
         const newNoteAddBtn = document.querySelector('#note_add');
         newNoteAddBtn.addEventListener('click', addNewNote);
+        newNoteAddBtn.addEventListener('click', () => {SaveLoad.saveProjectsData()});
 
         const noteEditWindow = document.querySelector('.note_editwindow');
         const editNoteTitle = document.querySelector('#note_editname');
@@ -305,11 +349,15 @@ const Display = (() => {
 
     };
 
-    return {clearMenu, displayProjects, createNoteCard};
+    return {clearMenu, displayProjects, clearContent, createNoteCard};
 
 })();
 
-Project('One');
+if (localStorage.getItem('ProjectsData') !== null) {
+    SaveLoad.loadProjectsData();
+    console.log('Data has been loaded')
+} else {
+    Project('One');
 Project('Two');
 Project('Three');
 Project('Four');
@@ -318,3 +366,5 @@ Display.displayProjects();
 Projects.arr[0].addTodo('Test', 'test text', '2024-10-24', 3);
 Projects.arr[0].addTodo('Double test', 'another text', '2024-10-25', 2);
 Projects.arr[0].todos.forEach(Display.createNoteCard);
+console.log('Boohoo, no data :C');
+}
