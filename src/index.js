@@ -151,7 +151,7 @@ const Display = (() => {
                 newNoteTitle.value = '';
                 newNoteDescr.value = '';
                 newNoteDate.value = '';
-                newNotePriority.value = '';
+                newNotePriority.value = 5;
                 console.table(Projects.arr);
             } else {newNoteDate.style.outline = 'solid red'};
         };
